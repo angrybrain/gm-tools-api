@@ -20,7 +20,7 @@ router.post('/', async (req, res, next) => {
         characterList: user.characterList
       }
 
-      const token = await auth.createToken(userData, '1h');
+      const token = await auth.createToken(userData, '1d');
 
       return res.status(200).json({ token: token });
     };

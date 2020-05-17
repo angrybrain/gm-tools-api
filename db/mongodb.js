@@ -1,28 +1,30 @@
 var mongoose = require('mongoose');
-const Goon = require('../models/goon')
-mongoose.connect(process.env.DB_HOST, { useNewUrlParser: true });
+const Character = require('../models/character')
+mongoose.connect(process.env.DB_HOST, { useUnifiedTopology: true, useNewUrlParser: true });
 
 
-async function getGoons(filter = null) {
-    return Goon.find(filter);
+async function getCharacters(filter = null) {
+    return Character.find(filter);
 }
 
 
-async function getGoonById(id) {
-    return Goon.findById(id);
+async function getCharacterById(id) {
+    return Character.findById(id);
 }
 
-async function createGoon(goon) {
-    const newGoon = new Goon(goon)
-    return newGoon.save();
+async function createCharacter(body) {
+    console.log('point inside')
+    const newCharacter = new Character(body);
+    console.log(newCharacter)
+    return newCharacter.save();
 }
 
-async function updateGoon(id, data) {
-    return Goon.findByIdAndUpdate(id, data, { new: true });
+async function updateCharacter(id, data) {
+    return Character.findByIdAndUpdate(id, data, { new: true });
 }
 
-async function deleteGoon(id) {
-    return Goon.findByIdAndDelete(id);
+async function deleteCharacter(id) {
+    return Character.findByIdAndDelete(id);
 }
 
-module.exports = { deleteGoon, updateGoon, createGoon, getGoons, getGoonById }
+module.exports = { deleteCharacter, updateCharacter, createCharacter, getCharacters, getCharacterById }

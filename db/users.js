@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 const User = require('../models/user')
-mongoose.connect(process.env.DB_HOST, { useNewUrlParser: true });
+mongoose.connect(process.env.DB_HOST, { useUnifiedTopology: true, useNewUrlParser: true });
 
 async function getUserByUsername(username) {
     return User.findOne({ username: username })

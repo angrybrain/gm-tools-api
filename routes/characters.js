@@ -1,21 +1,20 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('../utils/auth');
-var goons_db = require('../db/mongodb');
+var characters_db = require('../db/mongodb');
 var users_db = require('../db/users')
 
 router.get('/', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
   user = await users_db.getUserByUsername(req.authData.data.username);
-  console.log(user)
   try {
     let filter = '';
     if (user.role === 'gm') {
       filter = null;
     } else if (user.role === 'player') {
-      filter = { _id: user.characterList[0] }
+      filter = { active: true }
     }
-    goons = await goons_db.getGoons(filter);
-    res.status(200).json(goons);
+    Characters = await characters_db.getCharacters(filter);
+    res.status(200).json(Characters);
   }
   catch (err) {
     res.status(500).json({ message: err.message })
@@ -24,8 +23,8 @@ router.get('/', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
 
 router.get('/:id', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
   try {
-    const goon = await goons_db.getGoonById(req.params.id)
-    res.status(200).json(goon);
+    const character = await characters_db.getCharacterById(req.params.id)
+    res.status(200).json(character);
   }
   catch (err) {
     res.status(500).json({ message: err.message })
@@ -34,8 +33,10 @@ router.get('/:id', auth.ensureToken, auth.verfiyToken, async (req, res, next) =>
 
 router.post('/', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
   try {
-    const newGoon = await goons_db.createGoon(req.body)
-    res.status(201).json(newGoon)
+    const newCharacter = await characters_db.createCharacter(req.body);
+    console.log('2');
+    res.status(201).json(newCharacter);
+    console.log('3');
   } catch (err) {
     res.status(400)
   }
@@ -43,8 +44,8 @@ router.post('/', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
 
 router.put('/:id', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
   try {
-    const goon = await goons_db.updateGoon(req.params.id, req.body)
-    res.status(200).json(goon);
+    const character = await characters_db.updateCharacter(req.params.id, req.body)
+    res.status(200).json(character);
   }
   catch (err) {
     res.status(500).json({ message: err.message })
@@ -57,8 +58,8 @@ router.delete('/', auth.ensureToken, auth.verfiyToken, async (req, res, next) =>
 
 router.delete('/:id', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
   try {
-    const goon = await goons_db.deleteGoon(req.params.id)
-    res.status(200).json(goon);
+    const character = await characters_db.deleteCharacter(req.params.id)
+    res.status(200).json(character);
   }
   catch (err) {
     res.status(500).json({ message: err.message })

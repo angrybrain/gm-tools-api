@@ -7,14 +7,13 @@ async function hashPassword(password) {
 }
 
 async function comparePassword(password, hashedPassword) {
-    console.log(hashPassword(password))
     return bcrypt.compare(password, hashedPassword);
 }
 
 async function createToken(payload, expiresIn) {
     return jwt.sign({
         data: payload,
-    }, process.env.JWT_SECRET, { expiresIn: expiresIn });
+    }, process.env.JWT_SECRET, { expiresIn });
 }
 
 function ensureToken(req, res, next) {
@@ -30,7 +29,7 @@ function ensureToken(req, res, next) {
 }
 
 function verfiyToken(req, res, next) {
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, authData) => {
+    jwt.verify(req.token, process.env.JWT_SECRET, { ignoreExpiration: false }, (err, authData) => {
         if (err) {
             res.sendStatus(403);
         } else {
