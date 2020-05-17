@@ -13,9 +13,7 @@ async function getCharacterById(id) {
 }
 
 async function createCharacter(body) {
-    console.log('point inside')
     const newCharacter = new Character(body);
-    console.log(newCharacter)
     return newCharacter.save();
 }
 
