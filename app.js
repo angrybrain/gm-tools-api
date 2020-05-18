@@ -25,17 +25,4 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/characters', charactersRouter);
 
-
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
-io.on('connection', () => {
-    console.log('a user is connected')
-})
-
-io.on('updateAll', () => {
-    console.log('update request');
-    io.emit('update', { status: 'Added', id: req.body._id });
-})
-
 module.exports = app;
