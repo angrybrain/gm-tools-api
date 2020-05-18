@@ -8,6 +8,8 @@ router.post('/', async (req, res, next) => {
   try {
     const login = req.body.login;
     const password = req.body.password;
+    // console.log(login, password)
+    // console.log(await auth.hashPassword(password))
 
     const user = await db.getUserByUsername(login);
 
