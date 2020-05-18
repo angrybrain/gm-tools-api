@@ -3,7 +3,6 @@ var router = express.Router();
 var auth = require('../utils/auth');
 var characters_db = require('../db/mongodb');
 var users_db = require('../db/users')
-var io = require('../workers/socket');
 
 router.get('/', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
   user = await users_db.getUserByUsername(req.authData.data.username);
@@ -35,8 +34,6 @@ router.get('/:id', auth.ensureToken, auth.verfiyToken, async (req, res, next) =>
 router.post('/', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
   try {
     const newCharacter = await characters_db.createCharacter(req.body);
-    console.log('post')
-    io.emit('update');
     res.status(201).json(newCharacter);
   } catch (err) {
     res.status(400)
@@ -46,8 +43,6 @@ router.post('/', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
 router.put('/:id', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
   try {
     const character = await characters_db.updateCharacter(req.params.id, req.body);
-    console.log('put')
-    io.emit('update');
     res.status(200).json(character);
   }
   catch (err) {
@@ -62,7 +57,6 @@ router.delete('/', auth.ensureToken, auth.verfiyToken, async (req, res, next) =>
 router.delete('/:id', auth.ensureToken, auth.verfiyToken, async (req, res, next) => {
   try {
     const character = await characters_db.deleteCharacter(req.params.id);
-    io.emit('update');
     res.status(200).json(character);
   }
   catch (err) {
