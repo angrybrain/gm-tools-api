@@ -7,6 +7,7 @@ const characterSchema = mongoose.Schema({
     resolve: { type: Number, default: 0 },
     effects: { type: String, default: "" },
     items: { type: String, default: "Empty" },
+    notes: { type: String, default: "..." },
     advantages: {
         Stress: { type: Boolean, default: false },
         STR: { type: Boolean, default: false },
